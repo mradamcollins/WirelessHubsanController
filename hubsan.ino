@@ -19,10 +19,11 @@
 //#include <string.h>
 //#include <stdlib.h>
 #include <Arduino.h>
-//#include "config.h"
+#include "config.h"
 #include "a7105.h"
 
 volatile s16 Channels[NUM_OUT_CHANNELS];
+volatile uint8_t throttle=0, rudder=0, aileron = 0, elevator = 0;
 
 u8 packet[16];
 u8 channel;
@@ -181,9 +182,6 @@ s16 get_channel(u8 ch, s32 scale, s32 center, s32 range)
     return value;
 }
 
-
-volatile uint8_t throttle=0, rudder=0, aileron = 0, elevator = 0;
-
 static void hubsan_build_packet()
 {
     memset(packet, 0, 16);
@@ -226,8 +224,8 @@ static u16 hubsan_cb()
         }
         if (i == 20)
             Serial.println("Failed to complete write\n");
-       // else 
-       //     Serial.println("Completed write\n");
+//        else 
+//            Serial.println("Completed write\n");
         A7105_Strobe(A7105_RX);
         state &= ~WAIT_WRITE;
         state++;
@@ -236,7 +234,8 @@ static u16 hubsan_cb()
     case BIND_4:
     case BIND_6:
         if(A7105_ReadReg(A7105_00_MODE) & 0x01) {
-            state = BIND_1; //Serial.println("Restart");
+            state = BIND_1; 
+            Serial.println("Restart");
             return 4500; //No signal, restart binding procedure.  12msec elapsed since last write
         } 
 
@@ -288,6 +287,8 @@ static void initialize() {
     sessionid = rand();
     channel = allowed_ch[rand() % sizeof(allowed_ch)];
     state = BIND_1;
+    Serial.print("init done selected channel: ");
+    Serial.println(channel);
 }
 
 

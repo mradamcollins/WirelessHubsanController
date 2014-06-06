@@ -1,3 +1,6 @@
+#ifndef _CONFIG_H
+#define _CONFIG_H
+
 #include <stdint.h>
 
 #define NUM_OUT_CHANNELS 12
@@ -11,6 +14,8 @@
 #define u8 uint8_t
 
 extern volatile s16 Channels[NUM_OUT_CHANNELS];
+extern volatile uint8_t throttle, rudder, aileron , elevator ;
+extern u8 state;
 
 enum TxPower {
     TXPOWER_100uW,
@@ -40,3 +45,5 @@ enum ProtoCmds {
 
 
 void PROTOCOL_SetBindState(u32 msec);
+
+#endif

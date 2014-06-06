@@ -1,5 +1,6 @@
 #ifndef _IFACE_A7105_H_
 #define _IFACE_A7105_H_
+#include "config.h"
 
 enum A7105_State {
     A7105_SLEEP     = 0x80,
@@ -81,6 +82,8 @@ void A7105_Reset();
 void A7105_WriteID(u32 id);
 void A7105_Strobe(enum A7105_State);
 void A7105_SetPower(int power);
+void A7105_Setup();
+
 
 
 #endif
